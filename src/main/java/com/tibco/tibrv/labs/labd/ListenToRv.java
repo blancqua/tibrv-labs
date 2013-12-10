@@ -6,6 +6,8 @@ package com.tibco.tibrv.labs.labd;
 //Copyright 2005 - TIBCO Software Inc.
 //ALL RIGHTS RESERVED
 
+import static com.tibco.tibrv.Tibrv.IMPL_NATIVE;
+
 import com.tibco.tibrv.Tibrv;
 import com.tibco.tibrv.TibrvException;
 import com.tibco.tibrv.TibrvListener;
@@ -21,7 +23,7 @@ public class ListenToRv implements TibrvMsgCallback {
 			System.exit(1);
 		}
 
-		Tibrv.open();
+		Tibrv.open(IMPL_NATIVE);
 		TibrvRvdTransport conn = new TibrvRvdTransport();
 
 		for (int i = 0; i < args.length; ++i) {
