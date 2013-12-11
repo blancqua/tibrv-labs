@@ -1,0 +1,52 @@
+// TIBCO Rendezvous API Java Development
+// File: MsgParser.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+class MsgParser implements TibrvMsgCallback {
+   MsgParser(String[] args) throws TibrvException {
+      if  (args.length < 1) {
+         System.out.println("Usage: MsgParser SUBJECT ...");
+         System.exit(1);
+      }
+
+      Tibrv.open();
+      TibrvTransport transport= new TibrvRvdTransport();
+      for  (int i= 0; i < args.length;  ++i) {
+         // Step 1: Create a listener object to listen for inbound messages. 
+         // Using: TibrvListener()
+         
+      }
+
+      for (;;)
+         try {
+            Tibrv.defaultQueue().dispatch();
+         }
+         catch(InterruptedException ix) {}
+   }
+
+   public static void main(String[] args) throws TibrvException { new MsgParser(args); }
+
+   public void onMsg(TibrvListener listener, TibrvMsg msg) {
+      try {parseMsg(msg); }
+      catch(TibrvException tx) { System.out.println(tx); }
+   }
+
+   void parseMsg(TibrvMsg msg) throws TibrvException { parse(msg, ""); }
+
+   void parse(TibrvMsg msg, String indent) throws TibrvException
+   {
+      for  (int i= 0;  i < msg.getNumFields();  ++i)
+      {
+         // Step 2: Get a field from a message by an index. 
+         // Using: TibrvMsgField getFieldByIndex(int fieldIndex)
+         
+         if       (f.type == TibrvMsg.MSG)  parse((TibrvMsg)f.data, indent+"   ");
+         else
+            System.out.println(indent + f);
+      }
+   }
+}

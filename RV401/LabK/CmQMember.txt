@@ -1,0 +1,154 @@
+// TIBCO Rendezvous API Java Development
+// File: CmQMember.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import java.util.*;
+import com.tibco.tibrv.*;
+
+public class CmQMember implements TibrvMsgCallback
+{
+    // RVD transport parameters
+    String service = null;
+    String network = null;
+    String daemon  = null;
+    
+    // Step 1: Declare and initialize your own string variable "subject"
+    
+    // Step 2: Declare and initialize your own string variable "queueName"
+
+    public CmQMember(String args[])
+    {
+        // Parse parameters
+        parseParams(args);
+
+        // Step 3: open Tibrv in native implementation
+        
+
+        // Step 4 : Create RVD transport
+        
+
+        try 
+        {
+            // Create event queue
+            TibrvQueue queue = new TibrvQueue();
+        
+            // Step 5: Create Distributed Queue
+                        
+            // Step 6: Create queue listener
+                        
+            // Create dispatcher
+            TibrvDispatcher disp = new TibrvDispatcher(queue);
+            
+            // Report we initialized Ok
+            System.out.println("Queue name="+queueName+", listening on subject "+subject);
+        
+            // We'll never pass through this
+            // call because this example never stops.
+            disp.join();
+        }
+        catch (TibrvException e)
+        {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        catch (InterruptedException e)
+        {
+            System.exit(0);
+        }
+    }
+
+    // Step 7: Complete onMsg() arguments
+    // public void onMsg() 
+    {
+        try 
+        {
+            // Step 8: Report received message and it's seqno.
+               
+            System.out.println("Received message with seqno="+seqno+": "+msg);
+            System.out.flush();
+        }
+        catch(TibrvException e)
+        {
+            System.out.println("Failed to obtain seqno from CM message:");
+            e.printStackTrace();
+        }
+    }
+    
+       
+    void usage()
+    {
+        System.out.println("Usage: java cmqmember [-service service] [-network network]");
+        System.out.println("            [-daemon daemon] [-queue queueName]");
+        System.out.println("            [-subject subject]");
+        System.out.println("    default values are:");
+        System.out.println("       service = "+service);
+        System.out.println("       network = "+network);
+        System.out.println("       daemon  = "+daemon);
+        System.out.println("       queue   = "+queueName);
+        System.out.println("       subject = "+subject);
+        System.exit(-1);
+    }
+
+     
+    void parseParams(String[] args)
+    {
+        int i=0;
+        while(i < args.length)
+        {
+            if (args[i].equalsIgnoreCase("-h") ||
+                args[i].equalsIgnoreCase("-help") ||
+                args[i].equalsIgnoreCase("?")) {
+                usage();
+            }
+            else
+            if (i == args.length-1) // all parameters require value
+            {
+                usage();
+            }
+            else
+            if (args[i].equals("-service"))
+            {
+                service = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-network"))
+            {
+                network = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-daemon"))
+            {
+                daemon = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-subject"))
+            {
+                subject = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-queue"))
+            {
+                queueName = args[i+1];
+                i += 2;
+            }
+            else
+                usage();
+        }
+    }
+
+    //---------------------------------------------------------------
+    // main()
+    //---------------------------------------------------------------
+
+    public static void main(String args[])
+    {
+        new CmQMember(args);
+    }
+
+}

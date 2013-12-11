@@ -1,0 +1,54 @@
+// TIBCO Rendezvous API Java Development
+// File: Server.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+class Server implements TibrvMsgCallback {
+   Server(String[] args) throws TibrvException {
+      if  (args.length < 1) {
+         System.out.println("Usage: Server SUBJECT ...");
+         System.exit(1);
+      }
+
+      Tibrv.open();
+      TibrvTransport transport= new TibrvRvdTransport();
+      for  (int i= 0; i < args.length;  ++i) {
+         new TibrvListener(Tibrv.defaultQueue(),
+                           this,
+                           transport,
+                           args[i],
+                           null);
+      }
+
+      for (;;)
+         try {
+            Tibrv.defaultQueue().dispatch();
+         }
+         catch(InterruptedException ix) {}
+   }
+
+   public static void main(String[] args) throws TibrvException {
+      new Server(args);
+   }
+
+   public void onMsg(TibrvListener l, TibrvMsg m) {
+      System.out.println("Message received with subject: " + m.getSendSubject());
+      System.out.println("Msg: " + m);
+
+      TibrvMsg reply= new TibrvMsg();
+      try {
+      // Step 1: Create a TibrvMsg named reply.
+      //         Add reply type fields to reply.
+      //         set a reply subject for reply.
+
+      // Step 2: set a send subject for reply. 
+      //         use sendReply to send the reply.
+        
+      }
+      // Step 3: Add exception handling to your code
+      
+   }
+}

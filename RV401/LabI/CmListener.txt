@@ -1,0 +1,214 @@
+// TIBCO Rendezvous API Java Development
+// File: CmListener.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import java.util.*;
+import java.io.*;
+// Step 1: Import the TIBCO package
+
+// Step 2: Complete class cmlistener implements the callback
+//         public class CmListener 
+{
+    // RVD transport parameters
+    String service = null;
+    String network = null;
+    String daemon  = null;
+   
+    // Step 3: Define your own Subject name, named it subject
+    // Step 4: Define unique CM name, named it cmname
+
+    TibrvQueue        queue        = null;
+    TibrvRvdTransport rvdTransport = null;
+    TibrvCmTransport  cmTransport  = null;
+    TibrvCmListener   cmListener   = null;
+
+    //---------------------------------------------------------------
+    // cmlistener
+    //---------------------------------------------------------------
+
+    public CmListener(String args[])
+    {
+        // Parse parameters
+        parseParams(args);
+
+        // open Tibrv in native implementation
+        try
+        {
+           // Step 5: Open the TIB machinery
+        }
+        catch (TibrvException e)
+        {
+            System.out.println("Failed to open Tibrv in native implementation:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        // Create event queue, transports and listener
+
+        try
+        {
+            // Our event queue
+            queue = new TibrvQueue();
+
+            // Step 6: Create RVD transport and then CM transport
+            // For CM transport, use file-based ledger
+            // Step 7: Create listener for CM messages
+            
+            // Step 8: Set explicit confirmation
+            
+        }
+        catch(TibrvException e)
+        {
+            System.out.println("Failed to create queue, transport or listener:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        // Report we are running Ok
+        System.out.println("Listening on subject: "+subject);
+
+        // Dispatch queue
+        TibrvDispatcher disp = new TibrvDispatcher(queue);
+
+        // This example never quits...
+        // If we would close Tibrv this join() would go through,
+        // but because we never close Tibrv we'll get stuck
+        // inside the join() call forever.
+        try
+        {
+            disp.join();
+        }
+        catch(InterruptedException e)
+        {
+            System.exit(0);
+        }
+    }
+
+    //---------------------------------------------------------------
+    // onMsg
+    //---------------------------------------------------------------
+
+    // Step 9: Fill in the arguments to onMsg()
+    // public void onMsg()
+    {
+        System.out.println("Received message: "+msg);
+
+        try
+        {
+            // Step 10: Report we are confirming message
+            //          named it: seqno
+
+            // If it was not CM message or very first message
+            // we'll get seqno=0. Only confirm if seqno > 0.
+            if (seqno > 0) {
+                System.out.println("Confirming message with seqno="+seqno);
+                System.out.flush();
+
+                // Step 11: Confirm the message
+            }
+        }
+        catch (TibrvException e)
+        {
+            System.out.println("Failed to confirm CM message: "+e.toString());
+        }
+
+        // if message had the reply subject, send the reply
+        try
+        {
+            if (msg.getReplySubject() != null)
+            {
+                TibrvMsg reply = new TibrvMsg(msg.getAsBytes());
+                cmTransport.sendReply(reply,msg);
+            }
+        }
+        catch (TibrvException e)
+        {
+            System.out.println("Failed to send reply:");
+            e.printStackTrace();
+        }
+    }
+
+    //---------------------------------------------------------------
+    // usage
+    //---------------------------------------------------------------
+
+    void usage()
+    {
+        System.out.println("Usage: java cmlistener [-service service] [-network network]");
+        System.out.println("            [-daemon daemon] [-cmname cmname]");
+        System.out.println("            [-subject subject]");
+        System.out.println("    default values are:");
+        System.out.println("       service = "+service);
+        System.out.println("       network = "+network);
+        System.out.println("       daemon  = "+daemon);
+        System.out.println("       cmname  = "+cmname);
+        System.out.println("       subject = "+subject);
+        System.exit(-1);
+    }
+
+    //---------------------------------------------------------------
+    // parseParams
+    //---------------------------------------------------------------
+
+    void parseParams(String[] args)
+    {
+        int i=0;
+        while(i < args.length)
+        {
+            if (args[i].equalsIgnoreCase("-h") ||
+                args[i].equalsIgnoreCase("-help") ||
+                args[i].equalsIgnoreCase("?")) {
+                usage();
+            }
+            else
+            if (i == args.length-1) // all parameters require value
+            {
+                usage();
+            }
+            else
+            if (args[i].equals("-service"))
+            {
+                service = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-network"))
+            {
+                network = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-daemon"))
+            {
+                daemon = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-subject"))
+            {
+                subject = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-cmname"))
+            {
+                cmname = args[i+1];
+                i += 2;
+            }
+            else
+                usage();
+        }
+    }
+
+    //---------------------------------------------------------------
+    // main()
+    //---------------------------------------------------------------
+
+    public static void main(String args[])
+    {
+        new CmListener(args);
+    }
+
+}

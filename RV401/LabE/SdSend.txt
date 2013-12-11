@@ -1,0 +1,142 @@
+/*
+ * TIBCO Rendezvous API Java Development
+ * File : SdSend.java
+ * TIBCO Education Services
+ * Copyright 2005 - TIBCO Software Inc.
+ * ALL RIGHTS RESERVED
+ *
+ */
+
+import java.util.*;
+import com.tibco.tibrv.*;
+
+public class SdSend
+{
+
+    String daemon  = "ssl:localhost:7500";
+    String username= null;
+    String password= null;
+    String FIELD_NAME = "DATA";
+
+    public SdSend(String args[])
+    {
+        // parse arguments
+	  int i = get_InitParams(args);
+
+        // we must have at least one subject and one message
+        if (i > args.length-2)
+            usage();
+
+        if ((username == null) || (password == null))
+            usage();
+
+
+        try
+        {
+        // STEP 1 open Tibrv in native implementation
+        }
+        catch (TibrvException e)
+        {
+            System.err.println("Failed to open Tibrv in native implementation:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        // Create RVD transport
+        TibrvTransport transport = null;
+        try
+        {
+	    // STEP 2 use setDaemonCert to allow any cert and any name
+	    // STEP 3 use the incoming username and password
+
+        // STEP 4 Create the transport using null for network and service and the daemon parameter created above
+        }
+        catch (TibrvException e)
+        {
+            System.err.println("Failed to create TibrvRvdTransport:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        //STEP 5 Create the message object named  'msg'
+
+
+        try
+        {
+          //STEP 6 Set send subject into the message
+        }
+        catch (TibrvException e) {
+            System.err.println("Failed to set send subject:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        try
+        {
+            // one message for each parameter
+            while (i < args.length)
+            {
+                System.out.println("Publishing: subject="+msg.getSendSubject()+
+                            " \""+args[i]+"\"");
+                msg.update(FIELD_NAME,args[i]);
+                // STEP 7 Send the message
+                i++;
+            }
+        }
+        catch (TibrvException e)
+        {
+            System.err.println("Error sending a message:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+
+        try
+        {
+           //STEP 8 Close Tibrv
+        }
+        catch(TibrvException e)
+        {
+            System.err.println("Exception dispatching default queue:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+    }
+
+    // print usage information and quit
+    void usage()
+    {
+        System.err.println("Usage: java SdSend ");
+        System.err.println("       -user <user> -password <password> <subject> <messages>");
+        System.exit(-1);
+    }
+
+    int get_InitParams(String[] args)
+    {
+        int i=0;
+        while(i < args.length-1 && args[i].startsWith("-"))
+        {
+            if (args[i].equals("-user"))
+            {
+                username = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-password"))
+            {
+                password = args[i+1];
+                i += 2;
+            }
+            else
+                usage();
+        }
+        return i;
+    }
+
+    public static void main(String args[])
+    {
+        new SdSend(args);
+    }
+
+}

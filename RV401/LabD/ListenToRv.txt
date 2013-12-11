@@ -1,0 +1,40 @@
+// TIBCO Rendezvous API Java Development
+// File: ListenToRV.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+// Step 1: Complete class ListenToRv
+// class ListenToRv implements ?? {
+   ListenToRv(String[] args) throws TibrvException {
+      if  (args.length < 1) {
+         System.out.println("Usage: ListenToRv SUBJECT ...");
+         System.exit(1);
+      }
+
+      // Step 2: Open the Tibrv machinery
+
+      // Step 3: Create new RVD transports
+
+      for  (int i= 0; i < args.length;  ++i) {
+         // Step 4: Create a new TibrvListener
+      }
+
+      for (;;)
+         try {
+            // Step 5: Dispatch Tibrv events
+         }
+         catch(InterruptedException ix) {}
+   }
+
+   public static void main(String[] args) throws TibrvException {
+      new ListenToRv(args);
+   }
+
+   // Step 6: Create method onMsg(TibrvListener l, TibrvMsg m) that 
+   //         prints out the send subject, the reply subject, and the 
+   //         message for each message received.
+   
+}

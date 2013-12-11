@@ -1,0 +1,129 @@
+// TIBCO Rendezvous API Java Development
+// File: Dispatcher.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+public class Dispatcher implements TibrvMsgCallback
+{
+
+    String subject   = "dispatchers.test";  // test subject
+    long   startTime = 0;                   // the time we start
+
+    int processedMessageCount = 0;          // count of processed messages
+
+    static final int TOTAL_MESSAGES = 10;   // total number of messages
+
+    public Dispatcher()
+    {
+    }
+
+    public void execute()
+    {
+        try
+        {
+            //STEP 1: Open Tibrv environment.
+
+            //STEP 2: Get process transport
+
+            //STEP 3: Create a queue named queue
+
+            // Create listener
+            new TibrvListener(queue,this,transport,subject,null);
+
+            // Prepare the message
+            TibrvMsg msg = new TibrvMsg();
+            msg.setSendSubject(subject);
+
+            // Get start time
+            startTime = System.currentTimeMillis();
+
+            // Step 4: Create two dispatchers with 3 seconds timeout
+            //         so they quit when all messages are sent.
+            //         named them dispatcher1 and dispatcher2
+            
+
+            // We use this to track the message number
+            int msgIndex = 0;
+
+            System.err.println("Started publishing messages at "+
+                    +(System.currentTimeMillis()-startTime)/1000+" seconds");
+
+            // Start publishing two messages at a time
+            // every second, total of TOTAL_MESSAGES messages
+            for (int i=0; i<TOTAL_MESSAGES/2; i++)
+            {
+                // Publish 2 messages
+                for (int j=0; j<2; j++)
+                {
+                    msgIndex++;
+                    msg.update("field","value-"+msgIndex);
+                    transport.send(msg);
+                }
+
+                // Wait for 1 second
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e){}
+            }
+
+            System.err.println("Stopped publishing messages at "+
+                    +(System.currentTimeMillis()-startTime)/1000+" seconds");
+
+            // Wait until dispatchers process all messages
+            // and exit after the timeout
+            try
+            {
+                dispatcher1.join();
+                dispatcher2.join();
+            }
+            catch(InterruptedException e)
+            {
+            }
+
+            // Close Tibrv
+            Tibrv.close();
+        }
+        catch (TibrvException rve)
+        {
+            // this program does not use the network
+            // and supposedly should never fail.
+            rve.printStackTrace();
+            System.exit(0);
+        }
+
+    }
+
+    // Message callback
+    public void onMsg(TibrvListener listener, TibrvMsg msg)
+    {
+        // print which dispatcher got the message
+        System.err.println(Thread.currentThread().getName()+
+                " processing message "+msg+
+                " at "+(System.currentTimeMillis()-startTime)/1000+" seconds");
+
+        // imitate message processing takes 1 second
+        try
+        {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException e){}
+
+        processedMessageCount++;
+
+        // report when we done processing all TOTAL_MESSAGES messages
+        if (processedMessageCount == TOTAL_MESSAGES)
+            System.err.println("Processed all messages in "+
+                +(System.currentTimeMillis()-startTime)/1000+" seconds");
+    }
+
+    public static void main(String args[])
+    {
+        new Dispatcher().execute();
+    }
+
+}

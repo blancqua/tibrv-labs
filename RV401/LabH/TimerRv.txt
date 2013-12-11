@@ -1,0 +1,53 @@
+// TIBCO Rendezvous API Java Development
+// File: TimerRv.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+class TimerRv {
+   static TibrvTimer timer1;
+   static TibrvQueue queue;
+   double seconds= 2.0;
+
+   public static void main(String[] args) {
+       new TimerRv();
+   }
+
+   TimerRv() {
+    try {
+      Tibrv.open();
+      setTimer(seconds);
+      Tibrv.close();
+    }
+    catch(Exception e) {
+       System.err.println(e);
+       System.exit(-1);
+    }
+   }
+
+   void setTimer(double seconds) throws TibrvException, InterruptedException {
+      // Step 1: Extract the default queue object
+      //         using method: Tibrv.defaultQueue() named it queue.
+      
+      // Step 2: Start a timer. 
+      //         using Constructor: TibrvTimer() named it timer1 
+      
+      // Step 3: Place a call to start dispatching the event queue 
+      // in a separate thread, and await that thread's termination:
+      // new TibrvDispatcher(queue).join();
+      
+   }
+}
+
+
+class TimerCallback implements _________________ {
+   TimerRv t;
+   TimerCallback(TimerRv trv) { t= trv; }
+
+   int count;
+   public void ________(________ timerEvent) {
+      System.out.println(++count + " Timer Expired.");
+   }
+}

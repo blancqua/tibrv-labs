@@ -1,0 +1,94 @@
+// TIBCO Rendezvous API Java Development
+// File: Priority.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+public class Priority implements TibrvMsgCallback
+{
+    String subject1 = "1";
+    String subject2 = "2";
+
+    public Priority()
+    {
+    }
+
+    public void execute()
+    {
+        try
+        {
+            // open Tibrv environment
+            Tibrv.open(Tibrv.IMPL_JAVA);
+
+            // get process transport
+            TibrvTransport transport = Tibrv.processTransport();
+
+            // Step 1: Create two queues, queue1 and queue2 
+
+            // Step 2: set low priority for queue1 and high for queue2
+            
+            // Step 3: Create queue group named it group and add queues
+            
+            // Step 4: Create a listener for subject1 and queue1
+		// and another listener for subject2 and queue2
+
+            // Prepare the message
+            TibrvMsg msg = new TibrvMsg();
+
+            // Send 10 messages on subject1
+            msg.setSendSubject(subject1);
+            for (int i=0; i<10; i++)
+            {
+                msg.update("field","value-1-"+(i+1));
+                transport.send(msg);
+            }
+
+            // Send 10 messages on subject2
+            msg.setSendSubject(subject2);
+            for (int i=0; i<10; i++)
+            {
+                msg.update("field","value-2-"+(i+1));
+                transport.send(msg);
+            }
+
+            //Step 5:Create dispatcher thread with timeout 1 second for the 
+            // group. Name it dispatcher
+
+            // Wait until dispatcher processes all messages
+            // and exits after 1 second timeout
+            try
+            {
+                dispatcher.join();
+            }
+            catch(InterruptedException e)
+            {
+            }
+
+            // Close Tibrv
+            Tibrv.close();
+        }
+        catch (TibrvException rve)
+        {
+            // this program does not use the network
+            // and supposedly should never fail.
+            rve.printStackTrace();
+            System.exit(0);
+        }
+
+    }
+
+    // Message callback
+    public void onMsg(TibrvListener listener, TibrvMsg msg)
+    {
+        System.out.println("Received message on subject "+
+                           msg.getSendSubject()+": "+msg);
+    }
+
+    public static void main(String args[])
+    {
+        new Priority().execute();
+    }
+
+}	

@@ -1,0 +1,112 @@
+// TIBCO Rendezvous API Java Development
+// File: FtSend.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+import java.net.*;
+
+// Step 1. Declare class FtSend to contain the Fault Tolerant callback
+// class FtSend implements _________________ {
+  static TibrvTransport transport;
+  static int wt= 10;
+  static String group;
+
+// Step 2. Declare and initialize boolean variable "active"
+
+  static String id;
+
+  public static void main(String[] args)
+    throws TibrvException, InterruptedException, UnknownHostException {
+
+    String subject= args.length > 2 ? args[2] : "TIME";
+
+    try {
+      if  (args.length > 0) wt= Integer.parseInt(args[0]);
+    }
+    catch(NumberFormatException nfx) {}
+
+    group= args.length > 1 ? args[1] : ("FtSend." + InetAddress.getLocalHost());
+    id= group + "@" + wt;                        
+
+    FtSend orv= new FtSend();
+
+    orv.open();
+    transport= orv.connectRv();
+
+// Step 3. Register the callback.  Use:
+//      a. the default queue
+//      b. class instance containing the callback
+//      c. the transport
+//      d. the group name
+//      e. the weight
+//      f. the goal (of active members)
+//      g. heartbeat, preparation (0?) and activation interval
+//      h. the null closure
+
+// Step 4. Create a new dispatching thread
+
+    boolean always= true;
+    while (always) {
+
+// Step 5. Publish ONLY if active
+
+      {
+          TibrvMsg msg= new TibrvMsg();
+          msg.setSendSubject(subject);
+          msg.update(id,  new java.util.Date());
+          transport.send(msg);
+      }
+      Thread.sleep(5000);
+    }
+
+    orv.destroyRv(transport);
+    orv.close();
+  }
+
+  public TibrvRvdTransport connectRv() 
+    throws TibrvException {
+    
+    TibrvRvdTransport connection= new TibrvRvdTransport();
+    return connection;
+  }
+
+  public void destroyRv(TibrvTransport connection)
+    throws TibrvException {
+    connection.destroy();
+  }
+
+  public void open() throws TibrvException {
+    Tibrv.open();
+  }
+
+  public void close() throws TibrvException {
+    Tibrv.close();
+  }
+
+  public void onFtAction(TibrvFtMember m,
+                         String group,
+                         int action) {
+      switch(action) {
+
+      case TibrvFtMember.PREPARE_TO_ACTIVATE:
+        System.out.println(id + " preparing...");
+        break;
+
+      case TibrvFtMember.ACTIVATE:
+        System.out.println(id + " activating...");
+
+// Step 6. Set the active variable
+
+        break;
+
+      case TibrvFtMember.DEACTIVATE:
+        System.out.println(id + " deactivating...");
+
+// Step 7. Clear the active variable
+
+        break;
+      }
+   }
+}

@@ -1,0 +1,135 @@
+/*
+ * TIBCO Rendezvous API Java Development
+ * File : SdListen.java
+ * TIBCO Education Services
+ * Copyright 2005 - TIBCO Software Inc.
+ * ALL RIGHTS RESERVED
+ *
+ */
+
+import java.util.*;
+import com.tibco.tibrv.*;
+
+public class SdListen implements TibrvMsgCallback
+{
+    String daemon  = "ssl:localhost:7500";
+    String username= null;
+    String password= null;
+
+    public SdListen(String args[])
+    {
+        // parse arguments
+        int i = get_InitParams(args);
+
+        // we must have at least one subject
+        if ((i >= args.length) || (username == null) || (password == null))
+            usage();
+
+
+        try
+        {
+           //STEP 1 open Tibrv in native implementation
+        }
+        catch (TibrvException e)
+        {
+            System.err.println("Failed to open Tibrv in native implementation:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+
+        TibrvRvdTransport transport = null;
+        try
+        {
+	     // STEP 2 use setDaemonCert to allow any cert and any name
+	     // STEP 3 use the incoming username and password
+
+         // STEP 4 Create the transport using null for network and service and the daemon parameter created above
+        }
+        catch (TibrvException e)
+        {
+            System.err.println("Failed to create TibrvRvdTransport:");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        // Create listeners for specified subjects
+        while (i < args.length)
+        {
+
+            try
+            {
+               // STEP 5 create listener using default queue
+                System.err.println("Listening on: "+args[i]);
+            }
+            catch (TibrvException e)
+            {
+                System.err.println("Failed to create listener:");
+                e.printStackTrace();
+                System.exit(0);
+            }
+            i++;
+        }
+
+
+        while(true)
+        {
+            try
+            {
+                // STEP 6 dispatch Tibrv events using dispatch()
+            }
+            catch(TibrvException e)
+            {
+                System.err.println("Exception dispatching default queue:");
+                e.printStackTrace();
+                System.exit(0);
+            }
+            catch(InterruptedException ie)
+            {
+                System.exit(0);
+            }
+        }
+    }
+
+    public void onMsg(TibrvListener listener, TibrvMsg msg)
+    {
+        // STEP 7 Print out message subject and data
+        System.out.flush();
+    }
+
+    // print usage information and quit
+    void usage()
+    {
+        System.err.println("Usage: java SdListen ");
+        System.err.println("       -user <user> -password <password> <subject-list>");
+        System.exit(-1);
+    }
+
+    int get_InitParams(String[] args)
+    {
+        int i=0;
+        while(i < args.length-1 && args[i].startsWith("-"))
+        {
+            if (args[i].equals("-user"))
+            {
+                username = args[i+1];
+                i += 2;
+            }
+            else
+            if (args[i].equals("-password"))
+            {
+                password = args[i+1];
+                i += 2;
+            }
+            else
+                usage();
+        }
+        return i;
+    }
+
+    public static void main(String args[])
+    {
+        new SdListen(args);
+    }
+}
+

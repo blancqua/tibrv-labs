@@ -1,0 +1,70 @@
+// TIBCO Rendezvous API Java Development
+// File: MyVC.java
+// TIBCO Education Services
+// Copyright 2005 - TIBCO Software Inc.
+// ALL RIGHTS RESERVED
+
+import com.tibco.tibrv.*;
+
+public class MyVC implements TibrvMsgCallback{
+
+    TibrvRvdTransport conn ;
+
+	TibrvVcTransport vconn ;
+    String kk;
+    int i = 0;
+
+    public MyVC() throws TibrvException {
+        Tibrv.open();
+        conn = new TibrvRvdTransport();
+        // Step 1: Create a virtual circuit accept object. 
+        // using vconn
+        
+        System.out.println("Creating an Accept VC Object");
+
+// Step 2: Get the connect subject. 			
+System.out.println("Connect Subject is :" + kk );
+
+        // Step 3: Create a listener object to listen for inbound messages 
+        // with subject "USERXX.TEST".(XX is your student number)	    
+
+	    new TibrvListener(Tibrv.defaultQueue(),this, conn,"_RV.INFO.SYSTEM.VC.*",null);
+
+        TibrvMsg msg = new TibrvMsg();
+        // Step 4: Set the send subject(USERXX.TEST) 
+        //         and reply subjects(vconn.getConnectSubject) of msg
+        
+        msg.add("Data","Let's setup a virtual circuit !");
+        conn.send(msg);
+
+        System.out.println("Message sent");
+
+         for (;;)
+         try {
+            Tibrv.defaultQueue().dispatch();
+         }
+         catch(InterruptedException ix) {
+             conn.destroy();
+             Tibrv.close();
+         }
+
+    }
+    public void onMsg(TibrvListener l, TibrvMsg msg) {
+        try {
+		  i = i+1;
+              String a = (String)msg.get("Data");
+              System.out.println("Data : " + a );
+              if (i==1)
+              {
+// Step 5: Display the send subject and the reply subject
+               new TibrvListener(Tibrv.defaultQueue(),this, vconn,"TEST2",null);
+               System.out.println("Listening on TEST2");
+		      }
+        }
+        catch (TibrvException ee) {}
+    }
+
+    public static void main(String[] args) throws TibrvException {
+        MyVC vc = new MyVC();
+    }
+}
