@@ -20,7 +20,7 @@ import com.tibco.tibrv.TibrvTransport;
 
 public class FtSend implements TibrvFtMemberCallback {
 	static TibrvTransport transport;
-	static int wt = 50;
+	static int wt = 30;
 	static String group;
 	static volatile boolean active;
 	static String id;
