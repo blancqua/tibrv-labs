@@ -49,7 +49,7 @@ public class SendToRv {
 			System.out.println("Tibrv machinery is no longer valid");
 	}
 
-	public static void main(String[] args) throws TibrvException {
+	public static void main(String... args) throws TibrvException {
 		SendToRv orv = new SendToRv();
 		orv.init(args);
 		orv.openTib();

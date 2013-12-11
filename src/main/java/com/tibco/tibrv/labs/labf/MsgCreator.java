@@ -77,7 +77,7 @@ public class MsgCreator {
 		}
 	}
 
-	public static void main(String[] args) throws TibrvException {
+	public static void main(String... args) throws TibrvException {
 		MsgCreator orv = new MsgCreator();
 		orv.init(args);
 		orv.openTib();

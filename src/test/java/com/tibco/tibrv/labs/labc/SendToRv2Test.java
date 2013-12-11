@@ -7,7 +7,7 @@ public class SendToRv2Test {
 
 	@Test
 	public void sendToRv2() throws Exception {
-		SendToRv2.main(new String[] {"Hello...", "Hello!" });
+		SendToRv2.main("Hello...", "Hello!");
 	}
 
 }

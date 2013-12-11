@@ -119,7 +119,7 @@ public class SdSend {
 		return i;
 	}
 
-	public static void main(String args[]) {
+	public static void main(String... args) {
 		new SdSend(args);
 	}
 

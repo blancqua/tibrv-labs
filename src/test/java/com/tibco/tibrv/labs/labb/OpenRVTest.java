@@ -7,7 +7,7 @@ public class OpenRVTest {
 
 	@Test
 	public void openRv() throws Exception {
-		OpenRV.main(new String[] {});
+		OpenRV.main();
 	}
-	
+
 }

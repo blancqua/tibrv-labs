@@ -9,7 +9,7 @@ public class MsgCreatorTest {
 
 	@Test
 	public void msgCreator() throws Exception {
-		MsgCreator.main(new String [] { SUBJECT });
+		MsgCreator.main(SUBJECT);
 	}
 
 }

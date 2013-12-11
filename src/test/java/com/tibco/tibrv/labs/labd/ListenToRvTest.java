@@ -7,7 +7,7 @@ public class ListenToRvTest {
 
 	@Test
 	public void listenToRv() throws Exception {
-		ListenToRv.main(new String[] { "TIBCO.TEST1" });
+		ListenToRv.main("TIBCO.TEST1");
 	}
 
 }

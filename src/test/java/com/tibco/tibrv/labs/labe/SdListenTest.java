@@ -7,7 +7,7 @@ public class SdListenTest {
 
 	@Test
 	public void sdListen() throws Exception {
-		SdListen.main(new String[] { "-user", "user04", "-password", "user04", "USER04.>" });
+		SdListen.main("-user", "user04", "-password", "user04", "USER04.>");
 	}
 
 }

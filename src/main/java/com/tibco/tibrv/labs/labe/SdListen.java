@@ -113,7 +113,7 @@ public class SdListen implements TibrvMsgCallback {
 		return i;
 	}
 
-	public static void main(String args[]) {
+	public static void main(String... args) {
 		new SdListen(args);
 	}
 }

@@ -7,7 +7,7 @@ public class SdSendTest {
 
 	@Test
 	public void sdSend() throws Exception {
-		SdSend.main(new String[] { "-user", "user04", "-password", "user04", "USER04.test", "Test Message" });
+		SdSend.main("-user", "user04", "-password", "user04", "USER04.test", "Test Message");
 	}
 
 }

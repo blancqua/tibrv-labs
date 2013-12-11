@@ -67,7 +67,7 @@ public class MyXMLTest implements TibrvMsgCallback {
 		}
 	}
 
-	public static void main(String[] args) throws TibrvException {
+	public static void main(String... args) throws TibrvException {
 		MyXMLTest test = new MyXMLTest();
 	}
 }

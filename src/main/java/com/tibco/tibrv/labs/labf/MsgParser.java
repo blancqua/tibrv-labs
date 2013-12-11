@@ -36,7 +36,7 @@ class MsgParser implements TibrvMsgCallback {
 		}
 	}
 
-	public static void main(String[] args) throws TibrvException {
+	public static void main(String... args) throws TibrvException {
 		new MsgParser(args);
 	}
 

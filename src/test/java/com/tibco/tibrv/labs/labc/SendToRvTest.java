@@ -6,7 +6,7 @@ public class SendToRvTest {
 
 	@Test
 	public void sendToRv() throws Exception {
-		SendToRv.main(new String[] { "Hello", "Hello!" });
+		SendToRv.main("Hello", "Hello!");
 	}
-	
+
 }

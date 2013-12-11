@@ -9,7 +9,7 @@ public class MsgParserTest {
 
 	@Test
 	public void msgParser() throws Exception {
-		MsgParser.main(new String[] { SUBJECT });
+		MsgParser.main(SUBJECT);
 	}
 
 }

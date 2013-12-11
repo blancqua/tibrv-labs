@@ -65,7 +65,7 @@ public class OpenRV {
 		}
 	}
 
-	public static void main(String[] args) throws TibrvException {
+	public static void main(String... args) throws TibrvException {
 		OpenRV orv = new OpenRV();
 		orv.openTib();
 		orv.connectRv();

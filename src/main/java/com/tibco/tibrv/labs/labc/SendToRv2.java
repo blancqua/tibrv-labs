@@ -55,7 +55,7 @@ public class SendToRv2 {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		try {
 			SendToRv2 orv = new SendToRv2();
 			orv.init(args);

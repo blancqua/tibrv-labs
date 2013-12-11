@@ -38,7 +38,7 @@ public class ListenToRv implements TibrvMsgCallback {
 		}
 	}
 
-	public static void main(String[] args) throws TibrvException {
+	public static void main(String... args) throws TibrvException {
 		new ListenToRv(args);
 	}
 
