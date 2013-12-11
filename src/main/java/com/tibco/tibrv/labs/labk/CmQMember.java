@@ -26,7 +26,7 @@ public class CmQMember implements TibrvMsgCallback {
 	String network = null;
 	String daemon = null;
 	String subject = "subject";
-	String queueName = "queue";
+	String queueName = "cmname";
 
 	public CmQMember(String args[]) throws TibrvException {
 		// Parse parameters

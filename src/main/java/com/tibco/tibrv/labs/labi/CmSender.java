@@ -25,7 +25,7 @@ public class CmSender implements TibrvMsgCallback {
 	String daemon = null;
 
 	String subject = "subject";
-	String cmname = "queue";
+	String cmname = "cmname";
 
 	// Count of messages to be sent
 	int count = 100;
